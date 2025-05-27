@@ -1,0 +1,120 @@
+/* styles.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
+
+/* Сброс отступов */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Слой «травы» — он будет repeat-y и скроллиться */
+body {
+  /* два слоя фона: большая картинка + плитка травы */
+  background:
+    url('/background.png') no-repeat center top fixed,
+    url('/трава.png') repeat-y center top;
+  background-size:
+    cover,
+    auto;
+  font-family: 'Montserrat', sans-serif;
+  color: #fafafa;
+}
+
+/* А теперь уже ваши обычные стили поверх этого фона */
+#app {
+  min-height: 100vh;  /* чтобы body точно «тянулся» под контент */
+}
+
+/* Навигация */
+nav {
+  background: rgba(0,0,0,0.6);
+  padding: 1rem 2rem;
+  position: relative;
+  z-index: 2;
+}
+nav a {
+  color: #fafafa;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-right: 1.5rem;
+}
+nav a.router-link-active {
+  text-decoration: underline;
+}
+
+/* Заголовки */
+h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* Кнопки */
+button {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fafafa;
+  background: transparent;
+  border: 2px solid #fafafa;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+
+/* Ответы: две кнопки рядом */
+.answer-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.answer-buttons button {
+  flex: 1;
+}
+
+/* Левая кнопка — при hover красная */
+.answer-buttons button:first-child:hover {
+  border-color: #e74c3c;
+  background: rgba(231, 76, 60, 0.2);
+}
+/* Правая кнопка — при hover синяя */
+.answer-buttons button:last-child:hover {
+  border-color: #3498db;
+  background: rgba(52, 152, 219, 0.2);
+}
+/* Выбранная опция */
+.answer-buttons button.selected {
+  background: rgba(255,255,255,0.1);
+  border-color: #fff;
+}
+
+/* Кнопка «Отправить» */
+.submit-btn {
+  display: block;
+  width: 100%;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #2196f3;
+  color: #fff;
+  border: none;
+}
+
+/* Списки */
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+}

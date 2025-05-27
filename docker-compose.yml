@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    container_name: backend
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=147.45.251.116;Port=5432;Database=default_db;Username=gen_user;Password=u/u&eUpt2f&oH6"
+    ports:
+      - "5000:80"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"

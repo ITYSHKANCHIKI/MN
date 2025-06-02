@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using MoralNavigator.API.DTOs;
 using MoralNavigator.API.Services;
 
 namespace MoralNavigator.API.Controllers
 {
     [ApiController]
+    [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
@@ -15,7 +18,8 @@ namespace MoralNavigator.API.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
             var res = await _svc.Register(dto);
-            if (!res.Success) return BadRequest(res);
+            if (!res.Success) 
+                return BadRequest(res);
             return Ok(res);
         }
 
@@ -23,7 +27,8 @@ namespace MoralNavigator.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
             var res = await _svc.Login(dto);
-            if (!res.Success) return BadRequest(res);
+            if (!res.Success) 
+                return BadRequest(res);
             return Ok(res);
         }
     }

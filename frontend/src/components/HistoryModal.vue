@@ -34,6 +34,6 @@ export default {
   display: flex; justify-content: center; align-items: center;
 }
 .modal {
-  background: white; padding: 1.5rem; border-radius: 8px; width: 300px;
+  background: rgb(7, 19, 3); padding: 1.5rem; border-radius: 8px; width: 300px;
 }
 </style>

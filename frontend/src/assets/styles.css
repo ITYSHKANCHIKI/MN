@@ -9,6 +9,18 @@ html, body {
   height: 100%;
 }
 
+:root {
+  --main-bg-color: #1a2a1a;       /* тёмно-зелёный фон */
+  --borderradius: 8px;
+  --h1-color: #ffffff;
+  --parsize: 1rem;
+  --color-dark-gray: #9da19c;
+  --color-white: #fafafa;
+  --color-green: #4caf50;         /* основной зелёный */
+  --color-dark-green: #388e3c;    /* чуть темнее для hover */
+  --color-red: #e74c3c;           /* для ошибок */
+}
+
 /* Слой «травы» — он будет repeat-y и скроллиться */
 body {
   /* два слоя фона: большая картинка + плитка травы */

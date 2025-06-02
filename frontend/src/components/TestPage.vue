@@ -126,10 +126,10 @@ async function nextOrSubmit() {
 .polaroid {
   display: inline-block;
   background: #fff;
-  padding: 0.5rem 0.5rem 1.2rem;
+  padding: 0.5rem 0.5rem 2.5rem;
   border-radius: 4px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-  transform: rotate(-1deg);
+  transform: rotate(0deg);
   margin: 1rem 0;
 }
 .polaroid img {

@@ -1,24 +1,21 @@
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using MoralNavigator.API.DTOs;
 using MoralNavigator.API.Services;
-using System.Threading.Tasks;
 
 namespace MoralNavigator.API.Controllers
 {
     [ApiController]
-    [EnableCors("AllowAll")]                // разрешаем всем фронтам обращаться сюда
+    [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     public class TestsController : ControllerBase
     {
         private readonly TestService _testService;
+        public TestsController(TestService testService) => _testService = testService;
 
-        public TestsController(TestService testService)
-        {
-            _testService = testService;
-        }
-
-        // ноябрь CORS-предзапрос (preflight)
+        // Обработка CORS preflight-запросов
         [HttpOptions]
         [HttpOptions("{id}")]
         public IActionResult Options() => Ok();
@@ -26,28 +23,17 @@ namespace MoralNavigator.API.Controllers
         // GET api/tests
         [HttpGet]
         public async Task<IActionResult> GetAvailable()
-        {
-            var list = await _testService.GetAvailable();
-            return Ok(list);
-        }
+            => Ok(await _testService.GetAvailable());
 
         // GET api/tests/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
-        {
-            var test = await _testService.GetById(id);
-            return Ok(test);
-        }
+            => Ok(await _testService.GetById(id));
 
-        // POST api/tests/{id} — принимаем ответы
+        // POST api/tests/{id}
+        [Authorize]
         [HttpPost("{id}")]
-        public async Task<IActionResult> Submit(
-            int id,
-            [FromBody] SubmitAnswersDto dto)
-        {
-            // dto.UserId должно приходить из фронта
-            var result = await _testService.Submit(id, dto);
-            return Ok(result);
-        }
+        public async Task<IActionResult> Submit(int id, [FromBody] SubmitAnswersDto dto)
+            => Ok(await _testService.Submit(id, dto));
     }
 }

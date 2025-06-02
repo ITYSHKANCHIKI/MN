@@ -1,25 +1,22 @@
-# Stage 1: сборка на Node.js
+# 1) Сборка SPA с помощью Node.js
 FROM node:18-alpine AS build
 WORKDIR /app
 
-# Копируем только package.json (lock-файла нет)
-COPY package.json ./
-
-# Устанавливаем зависимости
+COPY package.json yarn.lock* package-lock.json* ./
 RUN npm install
 
-# Копируем исходники и билдим
 COPY . .
 RUN npm run build
 
-# Stage 2: Nginx для отдачи статики + прокси
+# 2) Финальный образ на базе Nginx
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
-# Копируем собранный билд
-COPY --from=build /app/dist .
+# Копируем готовый билд
+COPY --from=build /app/dist ./
 
-# Копируем наш конфиг вместо дефолтного
+# Копируем конфигурацию Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Nginx сам запустится
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

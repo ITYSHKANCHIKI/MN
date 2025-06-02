@@ -1,16 +1,72 @@
-version: '3.8'
+version: '2.4'
+
 services:
-  backend:
-    build: ./backend
-    container_name: backend
+  db:
+    image: postgres:14
+    restart: always
     environment:
-      ConnectionStrings__DefaultConnection: "Host=147.45.251.116;Port=5432;Database=default_db;Username=gen_user;Password=u/u&eUpt2f&oH6"
+      POSTGRES_DB: "mn"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "Password123"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    networks:
+      - mn-net
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: mn-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:5000"
+      ConnectionStrings__DefaultConnection: "Host=db;Database=mn;Username=postgres;Password=Password123"
+
+      # ← ЯДРО: переменные JWT даны ЗАГЛАВНЫМИ
+      JWT__KEY: "YourStrongSecretKeyHere"
+      JWT__ISSUER: "MoralNavigatorAPI"
+      JWT__AUDIENCE: "MoralNavigatorUsers"
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/swagger/v1/swagger.json || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
     ports:
-      - "5000:80"
+      - "5000:5000"
+    networks:
+      - mn-net
+    restart: on-failure
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mn-frontend
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+    environment:
+      VITE_API_URL: "http://backend:5000"
     ports:
       - "3000:80"
+    networks:
+      - mn-net
+    restart: on-failure
+
+volumes:
+  dbdata:
+
+networks:
+  mn-net:
+    driver: bridge

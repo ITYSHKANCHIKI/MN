@@ -1,3 +1,4 @@
+// File: src/store/auth.js
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
@@ -8,7 +9,7 @@ export const useAuthStore = defineStore('auth', {
     user: null
   }),
   getters: {
-    isLoggedIn: state => !!state.token
+    isLoggedIn: (state) => !!state.token
   },
   actions: {
     init() {

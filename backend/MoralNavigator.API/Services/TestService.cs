@@ -63,7 +63,7 @@ namespace MoralNavigator.API.Services
         /// <summary>
         /// Сохраняет результаты прохождения теста: создаёт TestResult, сохраняет ответы и возвращает ID + Score.
         /// </summary>
-        public async Task<ResultWithIdDto> SubmitAsync(int testId, SubmitAnswersDto dto)
+        public async Task<ResultWithIdDto> SubmitAsync(int testId, int userId, SubmitAnswersDto dto)
         {
             var test = await _uow.Tests.GetByIdAsync(testId);
             if (test == null)
@@ -76,7 +76,7 @@ namespace MoralNavigator.API.Services
             var result = new TestResult
             {
                 TestId = testId,
-                UserId = dto.UserId,
+                UserId = userId,
                 Score = score,
                 TakenAt = DateTime.UtcNow
             };

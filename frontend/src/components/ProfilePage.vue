@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted,watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/store/auth'
 import HistoryModal from '@/components/HistoryModal.vue'
@@ -105,6 +105,21 @@ onMounted(() => {
     }
   }
 })
+
+// Отслеживаем изменение query-параметра showChat, чтобы
+// открывать модальное окно при навигации из TestPage
+watch(
+  () => route.query.showChat,
+  (val) => {
+    if (val === '1') {
+      const storedId = localStorage.getItem('lastResultId')
+      if (storedId) {
+        lastResultId.value = Number(storedId)
+        showChat.value = true
+      }
+    }
+  }
+)
 </script>
 
 <style scoped>

@@ -6,8 +6,6 @@ namespace MoralNavigator.API.DTOs
 {
     public class SubmitAnswersDto
     {
-        public int UserId { get; set; }
-
         /// <summary>
         /// Словарь: ключ = questionId, значение = выбранный индекс (0 или 1).
         /// </summary>

@@ -40,7 +40,8 @@ namespace MoralNavigator.API.Controllers
         [HttpPost("{id}")]
         public async Task<IActionResult> SubmitAnswers(int id, [FromBody] SubmitAnswersDto dto)
         {
-            var result = await _testService.SubmitAsync(id, dto);
+            var userId = int.Parse(User.FindFirst("id")!.Value);
+            var result = await _testService.SubmitAsync(id, userId, dto);
             return Ok(result); // возвращаем { resultId, score }
         }
     }

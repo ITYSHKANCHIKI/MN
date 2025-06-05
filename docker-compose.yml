@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------------------------------------------
+  # 1) Сервис Backend (.NET 6.0 API)
+  # ----------------------------------------------------------------------------
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: mn-backend
+    restart: on-failure
+
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:5000"
+
+      ConnectionStrings__DefaultConnection: "Host=147.45.251.116;Port=5432;Database=default_db;Username=gen_user;Password=u/u&eUpt2f&oH6"
+
+      JWT__KEY:      "YourStrongSecretKeyHere"
+      JWT__ISSUER:   "MoralNavigatorAPI"
+      JWT__AUDIENCE: "MoralNavigatorUsers"
+
+    ports:
+      - "5000:5000"
+    networks:
+      - mn-net
+
+  # ----------------------------------------------------------------------------
+  # 2) Сервис Frontend (Vue.js → сборка → Nginx)
+  # ----------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mn-frontend
+    restart: on-failure
+    depends_on:
+      - backend
+
+    environment:
+      VITE_API_URL: "http://backend:5000"
+
+    ports:
+      - "3000:80"
+    networks:
+      - mn-net
+
+networks:
+  mn-net:
+    driver: bridge

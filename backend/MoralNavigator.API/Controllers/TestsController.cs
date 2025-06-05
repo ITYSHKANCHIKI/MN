@@ -40,7 +40,13 @@ namespace MoralNavigator.API.Controllers
         [HttpPost("{id}")]
         public async Task<IActionResult> SubmitAnswers(int id, [FromBody] SubmitAnswersDto dto)
         {
-            var userId = int.Parse(User.FindFirst("id")!.Value);
+            var claim = User.FindFirst("id");
+            if (claim == null || !int.TryParse(claim.Value, out var userId))
+                return Unauthorized();
+
+            if (dto?.Answers == null)
+                return BadRequest("Answers are required.");
+
             var result = await _testService.SubmitAsync(id, userId, dto);
             return Ok(result); // возвращаем { resultId, score }
         }

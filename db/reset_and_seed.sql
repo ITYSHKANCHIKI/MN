@@ -1,5 +1,6 @@
 -- Очистить таблицы (правильный порядок для ForeignKey)
-TRUNCATE TABLE "TestResults" RESTART IDENTITY CASCADE;
+-- Table name matches the EF Core configuration
+TRUNCATE TABLE "Results" RESTART IDENTITY CASCADE;
 TRUNCATE TABLE "Tests" RESTART IDENTITY CASCADE;
 TRUNCATE TABLE "Users" RESTART IDENTITY CASCADE;
 

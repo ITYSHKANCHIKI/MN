@@ -116,7 +116,10 @@ namespace MoralNavigator.API.Infrastructure.Data
             // ---------------------------------------------------
             modelBuilder.Entity<TestResult>(builder =>
             {
-                builder.ToTable("TestResults");
+                // Use the same table name as in the initial migration
+                // to avoid mismatches when the database is already seeded
+                // with the "Results" table.
+                builder.ToTable("Results");
                 builder.HasKey(tr => tr.Id);
 
                 builder.Property(tr => tr.TakenAt)

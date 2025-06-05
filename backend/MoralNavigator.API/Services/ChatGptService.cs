@@ -41,7 +41,11 @@ namespace MoralNavigator.API.Services
             _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
 
             var response = await _http.PostAsync("https://api.openai.com/v1/chat/completions", content);
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException($"OpenAI API responded {(int)response.StatusCode}: {body}");
+            }
 
             using var responseStream = await response.Content.ReadAsStreamAsync();
             using var doc = await JsonDocument.ParseAsync(responseStream);

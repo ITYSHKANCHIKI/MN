@@ -21,14 +21,13 @@
           placeholder="Напишите сообщение..."
           @keydown.enter.prevent="sendUserMessage"
         ></textarea>
-        <button :disabled="isLoading || !userInput.value.trim()" @click="sendUserMessage">Отправить</button>
-      </footer>
+        <button :disabled="sendDisabled" @click="sendUserMessage">Отправить</button>      </footer>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, computed } from 'vue';
 import axios from 'axios';
 import { useAuthStore } from '@/store/auth';
 
@@ -50,6 +49,10 @@ const messages = ref([]);
 const userInput = ref('');
 const isLoading = ref(false);
 const chatWindow = ref(null);
+const sendDisabled = computed(() => {
+  const text = typeof userInput.value === 'string' ? userInput.value.trim() : '';
+  return isLoading.value || !text;
+});
 
 onMounted(async () => {
   if (!auth.user?.id) {
@@ -91,7 +94,8 @@ onMounted(async () => {
 });
 
 async function sendUserMessage(customText) {
-  const text = (customText ?? userInput.value).trim();
+  const raw = customText != null ? customText : userInput.value;
+  const text = typeof raw === 'string' ? raw.trim() : '';
   if (!text) return;
 
   messages.value.push({ role: 'user', content: text });

@@ -73,8 +73,15 @@ namespace MoralNavigator.API.Controllers
                 new ChatMessageDto("user", userContent.ToString())
             };
 
-            var botReply = await _chatGpt.SendChatAsync(messages);
-            return Ok(new { botMessage = botReply });
+            try
+            {
+                var botReply = await _chatGpt.SendChatAsync(messages);
+                return Ok(new { botMessage = botReply });
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(503, "ChatGPT service unavailable");
+            }
         }
 
         [HttpPost("continue")]
@@ -97,8 +104,15 @@ namespace MoralNavigator.API.Controllers
                 messages.Add(new ChatMessageDto(m.Role, m.Content));
             }
 
-            var botReply = await _chatGpt.SendChatAsync(messages);
-            return Ok(new { botMessage = botReply });
+            try
+            {
+                var botReply = await _chatGpt.SendChatAsync(messages);
+                return Ok(new { botMessage = botReply });
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(503, "ChatGPT service unavailable");
+            }
         }
     }
 

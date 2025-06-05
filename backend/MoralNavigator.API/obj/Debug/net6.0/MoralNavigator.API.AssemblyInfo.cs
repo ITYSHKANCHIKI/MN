@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MoralNavigator.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eaef0be148c68d2e8308a4918ab57f2dd1bec49f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+70009eb309238135257d2541a77a2c4ada1b2ec7")]
 [assembly: System.Reflection.AssemblyProductAttribute("MoralNavigator.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MoralNavigator.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

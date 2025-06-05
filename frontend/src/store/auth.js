@@ -20,8 +20,8 @@ export const useAuthStore = defineStore('auth', {
         axios.defaults.headers.common['Authorization'] = `Bearer ${t}`
         const decoded = jwt_decode(t)
         this.user = {
-          id: decoded.nameid || decoded.sub,
-          username: decoded.unique_name || decoded.name
+          id: parseInt(decoded.id || decoded.nameid || 0),
+          username: decoded.unique_name || decoded.name || decoded.sub
         }
       }
     },
@@ -37,8 +37,8 @@ export const useAuthStore = defineStore('auth', {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
         const decoded = jwt_decode(token)
         this.user = {
-          id: decoded.nameid || decoded.sub,
-          username: decoded.unique_name || decoded.name
+          id: parseInt(decoded.id || decoded.nameid || 0),
+          username: decoded.unique_name || decoded.name || decoded.sub
         }
       } else {
         // Если по какой-то причине токена нет — кидаем ошибку
@@ -57,8 +57,8 @@ export const useAuthStore = defineStore('auth', {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
         const decoded = jwt_decode(token)
         this.user = {
-          id: decoded.nameid || decoded.sub,
-          username: decoded.unique_name || decoded.name
+          id: parseInt(decoded.id || decoded.nameid || 0),
+          username: decoded.unique_name || decoded.name || decoded.sub
         }
       } else {
         throw new Error(response.data.error || 'Неверный логин или пароль')

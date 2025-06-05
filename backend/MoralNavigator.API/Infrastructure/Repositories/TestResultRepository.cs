@@ -32,6 +32,7 @@ namespace MoralNavigator.API.Infrastructure.Repositories
             return await _db.Results
                 .Where(r => r.UserId == userId)
                 .Include(r => r.Test)
+                .Include(r => r.UserAnswers)
                 .ToListAsync();
         }
     }

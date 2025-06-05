@@ -21,7 +21,7 @@
           placeholder="Напишите сообщение..."
           @keydown.enter.prevent="sendUserMessage"
         ></textarea>
-        <button :disabled="isLoading || !userInput.trim()" @click="sendUserMessage">Отправить</button>
+        <button :disabled="isLoading || !userInput.value.trim()" @click="sendUserMessage">Отправить</button>
       </footer>
     </div>
   </div>
@@ -62,7 +62,7 @@ onMounted(async () => {
     isLoading.value = true;
     const payload = {
       resultId: props.resultId,
-      userId: auth.user.id
+      userId: Number(auth.user.id)
     };
     const { data } = await axios.post('/api/chat/initiate', payload);
     messages.value.push({ role: 'system', content: 'Чат с психологом открыт.' });
@@ -109,7 +109,7 @@ async function sendUserMessage(customText) {
     isLoading.value = true;
     const payload = {
       resultId: props.resultId,
-      userId: auth.user.id,
+      userId: Number(auth.user.id),
       messages: payloadMessages
     };
     const { data } = await axios.post('/api/chat/continue', payload);

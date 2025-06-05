@@ -25,7 +25,8 @@ namespace MoralNavigator.API.Services
                 ResultId = r.Id,
                 TestTitle = r.Test?.Title ?? "—",
                 Score = r.Score,
-                TakenAt = r.TakenAt
+                TakenAt = r.TakenAt,
+                Answers = r.UserAnswers.ToDictionary(a => a.QuestionId, a => a.SelectedOption)
             });
         }
     }

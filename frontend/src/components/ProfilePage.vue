@@ -95,14 +95,9 @@ onMounted(() => {
   loadTests()
   loadKohlbergStats()
 
-  // Проверяем lastResultId в localStorage
   const storedId = localStorage.getItem('lastResultId')
   if (storedId) {
     lastResultId.value = Number(storedId)
-    // Если в query есть showChat=1 – открываем сразу ChatModal
-    if (route.query.showChat === '1') {
-      showChat.value = true
-    }
   }
 })
 
@@ -118,7 +113,8 @@ watch(
         showChat.value = true
       }
     }
-  }
+  },
+  { immediate: true }
 )
 </script>
 

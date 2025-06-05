@@ -42,10 +42,14 @@ const emit = defineEmits(['close']);
 
 const auth = useAuthStore();
 
-const messages = ref<Array<{ role: string, content: string }>>([]);
+/**
+ * Array of chat messages. Each item has the shape
+ * { role: 'system' | 'user' | 'assistant', content: string }
+ */
+const messages = ref([]);
 const userInput = ref('');
 const isLoading = ref(false);
-const chatWindow = ref<HTMLElement|null>(null);
+const chatWindow = ref(null);
 
 onMounted(async () => {
   if (!auth.user?.id) {
@@ -64,6 +68,19 @@ onMounted(async () => {
     messages.value.push({ role: 'system', content: 'Чат с психологом открыт.' });
     messages.value.push({ role: 'assistant', content: data.botMessage });
     await scrollToBottom();
+
+    const stored = localStorage.getItem('lastAnswers');
+    if (stored) {
+      try {
+        const obj = JSON.parse(stored);
+        const text = Object.entries(obj)
+          .map(([q, a]) => `Вопрос ${q}: вариант ${Number(a) + 1}`)
+          .join('\n');
+        await sendUserMessage(text);
+      } catch (err) {
+        console.error('Не удалось отправить сохранённые ответы:', err);
+      }
+    }    
   } catch (e) {
     console.error('Ошибка инициации чата:', e);
     messages.value.push({ role: 'assistant', content: 'Ошибка при инициации чата.' });
@@ -73,12 +90,14 @@ onMounted(async () => {
   }
 });
 
-async function sendUserMessage() {
-  const text = userInput.value.trim();
+async function sendUserMessage(customText) {
+  const text = (customText ?? userInput.value).trim();
   if (!text) return;
 
   messages.value.push({ role: 'user', content: text });
-  userInput.value = '';
+  if (!customText) {
+    userInput.value = '';
+  }
   await scrollToBottom();
 
   const payloadMessages = messages.value.map(m => ({
